@@ -1,0 +1,31 @@
+input,
+select {
+    width: 20%;
+    padding: 12px;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border: 1px solid black;
+    margin-right: 1%;
+}
+
+select {
+    appearance: none;
+}
+
+button {
+    padding: 12px 20px;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 255, 0.5);
+    color: white;
+    border: none;
+}
+
+form {
+    width: 100%
+}
+

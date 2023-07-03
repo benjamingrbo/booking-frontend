@@ -1,0 +1,48 @@
+.split-body {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .split-body div {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+    position: relative;
+    color: #333; /* Default text color */
+  }
+  
+  .split-body div::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 255, 0);
+    transition: background-color 0.5s ease;
+    z-index: -1;
+  }
+  
+  .split-body div:hover::after {
+    background-color: rgba(0, 0, 255, 0.3);
+  }
+  
+  .split-body div.active::after {
+    background-color: rgba(0, 0, 255, 0.5);
+  }
+  
+  .split-body div:hover {
+    color: #fff; /* Text color on hover */
+  }
+  
+  .split-body div a {
+    text-decoration: none;
+    color: inherit; /* Inherit text color from parent div */
+    font-weight: bold;
+  }
+  
+  .split-body div a:hover {
+    color: #fff; /* Text color on anchor hover */
+  }

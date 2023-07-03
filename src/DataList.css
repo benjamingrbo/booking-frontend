@@ -1,0 +1,29 @@
+.DataListComponent {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: 2% auto;
+}
+
+.DataListComponent .row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.DataListComponent .card {
+    flex-basis: 30%;
+    width: 100%;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.DataListComponent h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.DataListComponent p {
+    font-size: 14px;
+}

@@ -1,0 +1,37 @@
+.container {
+    display: flex;
+    justify-content: center; /* Horizontally center the form */
+    align-items: center; /* Vertically center the form */
+    height: 100vh; /* Set the height of the container to the full viewport height */
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  select,
+  input,
+  textarea {
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  

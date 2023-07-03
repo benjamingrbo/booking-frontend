@@ -1,0 +1,86 @@
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .ProfileOverview {
+    width: 90%;
+    margin: 3% auto;
+  }
+  
+  .ToggleButtons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .ToggleButtons button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    font-size: 16px;
+    background-color: #3b82f6;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .ToggleButtons button.active {
+    background-color: #2563eb;
+  }
+  
+  .ProfileSections {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ProfileInfo,
+  .PasswordChange {
+    padding: 20px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s ease;
+    margin-top:2%;
+  }
+  
+  .ProfileInfo.show,
+  .PasswordChange.show {
+    display: block;
+  }
+  
+  .ProfileInfo h2,
+  .PasswordChange h2 {
+    margin-bottom: 10px;
+    color: #2563eb;
+  }
+  
+  .ProfileInfo input,
+  .PasswordChange input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    outline: none;
+  }
+  
+  .ProfileInfo button,
+  .PasswordChange button {
+    padding: 10px 20px;
+    background-color: #2563eb;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .ProfileInfo button:hover,
+  .PasswordChange button:hover {
+    background-color: #1d4ed8;
+  }

@@ -1,0 +1,54 @@
+.appointments-page {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .section {
+    flex-basis: 100%;
+  }
+  
+  .section h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .section li {
+    display: flex;
+    align-items: center;
+    background-color: #f8f8f8;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .section li span {
+    flex-grow: 1;
+    margin-bottom: 5px;
+  }
+  
+  .section li button {
+    margin-left: 10px;
+  }
+  
+  /* Additional styling for different appointment statuses */
+  .section.pending {
+    background-color: #ffd700;
+  }
+  
+  .section.accepted {
+    background-color: #90ee90;
+  }
+  
+  .section.declined {
+    background-color: #ff4500;
+  }
+  
+  .section.finished {
+    background-color: #a9a9a9;
+  }
+  

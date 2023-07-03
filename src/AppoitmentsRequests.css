@@ -1,0 +1,40 @@
+/* appointment-requests.css */
+
+#pending-requests-heading,
+#accepted-requests-heading,
+#declined-requests-heading,
+#finished-requests-heading {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+#pending-requests-list,
+#accepted-requests-list,
+#declined-requests-list,
+#finished-requests-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 20px;
+}
+
+#pending-requests-list li,
+#accepted-requests-list li,
+#declined-requests-list li,
+#finished-requests-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
