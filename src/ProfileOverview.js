@@ -1,21 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ProfileOverview.css"
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import { BrowserRouter as Router, Route, Routes, Navigate, Link } from 'react-router-dom';
 import Navbar from "./Navbar";
 
 
 const ProfileOverview = () => {
     const [activeSection, setActiveSection] = useState('info');
-    const [formDataProfileInfo, setFormDataProfileInfo] = useState({
-        name: 'John',
-        surname: 'Doe',
-        contactNumber: '123456789'
-    });
+    const userId = localStorage.getItem("userId");
+    const headers = { 'Authorization': localStorage.getItem("token") };
+
+    useEffect(() => {
+        fetch(`https://localhost:44392/api/User/getUser?parametar=${userId}`, { headers })
+            .then(response => response.json())
+            .then(data => setFormDataProfileInfo(data))
+            .catch(error => console.log(error));
+    }, []);
+
+    const [formDataProfileInfo, setFormDataProfileInfo] = useState({});
+
     const [formDataPasswordChange, setFormDataPasswordChange] = useState({
+        userId: parseInt(userId),
         oldPassword: '',
         newPassword: ''
     })
@@ -47,51 +50,87 @@ const ProfileOverview = () => {
     const handleSubmitProfileInfo = (e) => {
         e.preventDefault();
         // Perform submit action for Profile Info here
+        console.log(formDataProfileInfo)
+        fetch(`https://localhost:44392/api/User/changeUser/${userId}`, {
+            method: 'PUT', // Use PATCH instead of POST
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem("token"),
+            },
+            body: JSON.stringify(formDataProfileInfo)
+        })
+            .then((response) => response.json())
+            .then((json) => console.log(json))
+            .catch((error) => console.log(error));
+
         setProfileInfoChanges(false);
     };
 
-    const handleSubmitPasswordChange = (e) => {
+    const handleSubmitPasswordChange = async (e) => {
         e.preventDefault();
-        // Perform submit action for Password Change here
+          try {
+            const response = await fetch('https://localhost:44392/api/User/changePassword', {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem("token")
+              },
+              body: JSON.stringify(formDataPasswordChange),
+            });
+     
+            if (response.ok) {
+              // Password change successful
+              alert("You have successfully changed your password.")
+              window.location.reload();
+            } else {
+              alert("Old password is wrong.")
+            }
+          } catch (error) {
+            // Handle error
+          }
     };
 
     return (
         <div>
-            <Navbar/>
+            <Navbar />
             <div className="ProfileOverview">
                 <div className="ToggleButtons">
                     <button
                         className={activeSection === 'info' ? 'active' : ''}
                         onClick={() => handleToggle('info')}
                     >
-                        Profile Info
+                        Informacije o profilu
                     </button>
                     <button
                         className={activeSection === 'password' ? 'active' : ''}
                         onClick={() => handleToggle('password')}
                     >
-                        Password Change
+                        Promjena lozinke
                     </button>
                 </div>
                 <div className="ProfileSections">
                     {activeSection === 'info' && (
                         <div className="ProfileInfo">
-                            <h2>Profile Info</h2>
+                            <h2>Informacije o profilu</h2>
                             <form onSubmit={handleSubmitProfileInfo}>
+                                <label>Korisničko ime</label>
                                 <input
                                     type="text"
-                                    name="name"
-                                    value={formDataProfileInfo.name}
+                                    name="username"
+                                    value={formDataProfileInfo.username}
                                     onChange={handleChangeProfileInfo}
-                                    placeholder="Name"
+                                    placeholder="username"
                                 />
+                                <label>Email</label>
                                 <input
                                     type="text"
-                                    name="surname"
-                                    value={formDataProfileInfo.surname}
+                                    name="email"
+                                    value={formDataProfileInfo.email}
                                     onChange={handleChangeProfileInfo}
-                                    placeholder="Surname"
+                                    placeholder="email"
                                 />
+                                <label>Kontakt telefon</label>
                                 <input
                                     type="text"
                                     name="contactNumber"
@@ -100,15 +139,16 @@ const ProfileOverview = () => {
                                     placeholder="Contact Number"
                                 />
                                 {/* Add additional input fields here */}
+                                <br></br>
                                 {profileInfoChanges && (
-                                    <button type="submit">Submit</button>
+                                    <button style={{ width: "80%", float: "right" }} type="submit">Submit</button>
                                 )}
                             </form>
                         </div>
                     )}
                     {activeSection === 'password' && (
                         <div className="PasswordChange">
-                            <h2>Password Change</h2>
+                            <h2>Promjena lozinke</h2>
                             <form onSubmit={handleSubmitPasswordChange}>
                                 <input
                                     type="password"
@@ -125,7 +165,7 @@ const ProfileOverview = () => {
                                     placeholder="New Password"
                                 />
                                 {passwordInfoChanges && (
-                                    <button type="submit">Submit</button>
+                                    <button style={{ width: "80%", float: "left" }} type="submit">Submit</button>
                                 )}
                             </form>
                         </div>

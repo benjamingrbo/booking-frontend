@@ -31,7 +31,7 @@
   }
   
   .ToggleButtons button.active {
-    background-color: #2563eb;
+    background-color: #3f51b5;
   }
   
   .ProfileSections {
@@ -57,7 +57,7 @@
   .ProfileInfo h2,
   .PasswordChange h2 {
     margin-bottom: 10px;
-    color: #2563eb;
+    color: #3f51b5;
   }
   
   .ProfileInfo input,
@@ -72,7 +72,7 @@
   .ProfileInfo button,
   .PasswordChange button {
     padding: 10px 20px;
-    background-color: #2563eb;
+    background-color: #3f51b5;
     border: none;
     border-radius: 5px;
     color: #fff;
@@ -82,5 +82,16 @@
   
   .ProfileInfo button:hover,
   .PasswordChange button:hover {
-    background-color: #1d4ed8;
+    background-color: #3f51b5;
+  }
+
+  .ProfileSections label, input{
+    display: inline-block;
+  }
+  .ProfileSections label{
+    width: 20%;
+  }
+
+  .ProfileSections input{
+    width: 80%;
   }

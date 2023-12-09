@@ -1,33 +1,101 @@
-/* edit-car-shop-service.css */
+.editServiceContainer {
+  display: flex;
+  justify-content: center; /* Horizontally center the form */
+  align-items: center; /* Vertically center the form */
+  height: 100vh; /* Set the height of the container to the full viewport height */
+}
 
-form {
-    display: flex;
-    flex-direction: column;
-    max-width: 300px;
-    margin: 0 auto;
-  }
-  
-  label {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  select,
-  input,
-  textarea {
-    margin-bottom: 10px;
-    padding: 5px;
-  }
-  
-  button {
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
+.editServiceContainer form {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+}
+
+.editServiceContainer label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.editServiceContainer select, input, textarea {
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+.editServiceContainer select {
+display: inline-block;
+box-sizing: border-box;
+width: 100%;
+outline: none;
+height: 5%;
+line-height: 30px;
+border-radius: 4px;
+}
+
+.editServiceContainer input[type="text"]{
+width: 48%;
+padding: 0 0 0 10px;
+margin: 0;
+color: #8a8b8e;
+border: 1px solid #c2c0ca;
+font-style: normal;
+font-size: 16px;
+-webkit-appearance: none;
+   -moz-appearance: none;
+        appearance: none;
+position: relative;
+display: inline-block;
+background: none;
+}
+
+.editServiceContainer p {
+display: inline-block;
+margin: auto;
+margin-left: 5px;
+}
+
+.editServiceContainer input[type="text"]:focus{
+border-color: #3ca9e2;
+}
+.editServiceContainer input[type="text"]:focus:invalid{
+color: #cc1e2b;
+border-color: #cc1e2b;
+}
+
+.editServiceContainer button {
+  padding: 10px;
+  background-color: #3f51b5;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.editServiceContainer button:hover {
+  background-color: #0056b3;
+}
+
+.editServiceContainer textarea{
+width: 95%;
+}
+
+
+.editServiceContainer input[type="submit"] {
+border: none;
+display: block;
+background-color: #3ca9e2;
+color: #fff;
+font-weight: bold;
+text-transform: uppercase;
+cursor: pointer;
+-webkit-transition: all 0.2s ease;
+transition: all 0.2s ease;
+font-size: 18px;
+position: relative;
+display: inline-block;
+cursor: pointer;
+text-align: center;
+}
+.editServiceContainer input[type="submit"]:hover {
+background-color: #329dd5;
+-webkit-transition: all 0.2s ease;
+transition: all 0.2s ease;
+}

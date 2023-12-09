@@ -1,89 +1,79 @@
 import React, { useEffect, useState } from 'react';
+import './EditCarShopService.css'
+import { BrowserRouter as Router, Route, Routes, Navigate, Link, useLocation } from 'react-router-dom';
 
-const EditCarShopService = ({ serviceId }) => {
-    const [service, setService] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState('');
+const EditCarShopService = () => {
+    const [data, setData] = useState({});
     const [price, setPrice] = useState('');
     const [moreInformation, setMoreInformation] = useState('');
+    const { state } = useLocation();
+    const { serviceId } = state;
+    const headers = { 'Authorization': localStorage.getItem("token") };
 
     useEffect(() => {
-        // Simulating API call to fetch service details
-        fetchServiceDetails(serviceId)
-            .then((response) => {
-                setService(response);
-                setSelectedCategory(response.category);
-                setPrice(response.price);
-                setMoreInformation(response.moreInformation);
-            })
-            .catch((error) => {
-                console.error('Error fetching service details:', error);
-            });
-    }, [serviceId]);
+        fetch(`https://localhost:44392/api/CarShopService/getCarShopService?parametar=${serviceId}`, { headers })
+            .then(response => response.json())
+            .then(data => setData(data))
+            .catch(error => console.log(error));
+    }, []);
 
-    const fetchServiceDetails = (id) => {
-        // Replace this with your actual API call to fetch service details based on the ID
-        return new Promise((resolve, reject) => {
-            // Simulating API response delay
-            setTimeout(() => {
-                const mockService = {
-                    id: id,
-                    category: 'Maintenance',
-                    price: 100,
-                    moreInformation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                };
-                resolve(mockService);
-            }, 500);
-        });
-    };
 
-    const handleCategoryChange = (event) => {
-        setSelectedCategory(event.target.value);
-    };
+    const handleChange = (event) => {
+        const {name, value} = event.target;
+        setData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
 
-    const handlePriceChange = (event) => {
-        setPrice(event.target.value);
-    };
-
-    const handleMoreInformationChange = (event) => {
-        setMoreInformation(event.target.value);
-    };
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
         // Add your submit logic here, e.g., API call
-        console.log('Updated Service:', {
-            id: service.id,
-            category: selectedCategory,
-            price: price,
-            moreInformation: moreInformation,
-        });
+
+        fetch(`https://localhost:44392/api/CarShopService/changeCarShopService/${serviceId}`, {
+            method: 'PUT', // Use PATCH instead of POST
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem("token"),
+                
+            },
+            body: JSON.stringify(data)
+        })
+            .then((response) => response.json())
+            .then((json) => console.log(json))
+            .catch((error) => console.log(error));
     };
 
-    if (!service) {
-        return <div>Loading...</div>;
-    }
 
     return (
-        <div className='container'>
+        <div className="editServiceContainer">
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="category">Category:</label>
-                    <select id="category" value={selectedCategory} onChange={handleCategoryChange}>
-                        <option value="">Select a category</option>
-                        <option value="Maintenance">Maintenance</option>
-                        <option value="Repairs">Repairs</option>
-                        <option value="Inspections">Inspections</option>
-                    </select>
+                    <label htmlFor="price">Cijena</label>
+                    <hr></hr>
+                    <input
+                        type="text"
+                        id="price"
+                        name='price'
+                        value={data.price}
+                        onChange={handleChange} />
                 </div>
+                <br></br>
+                <br></br>
                 <div>
-                    <label htmlFor="price">Price:</label>
-                    <input type="text" id="price" value={price} onChange={handlePriceChange} />
+                    <label htmlFor="moreInformation">Više informacija</label>
+                    <hr></hr>
+                    <textarea
+                        id="moreInformation"
+                        name='moreInformation'
+                        value={data.moreInformation}
+                        onChange={handleChange} />
                 </div>
-                <div>
-                    <label htmlFor="moreInformation">More Information:</label>
-                    <textarea id="moreInformation" value={moreInformation} onChange={handleMoreInformationChange} />
-                </div>
-                <button type="submit">Update</button>
+                <br></br>
+                <br></br>
+                <button type="submit">Submit</button>
             </form>
         </div>
     );

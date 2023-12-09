@@ -1,68 +1,100 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Appoitments.css'
 import Navbar from "./Navbar";
+import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 
 const Appointments = () => {
-    const appointments = [
-        { id: 1, status: 'pending', date: '2023-06-26', time: '10:00 AM', customer: 'John Doe' },
-        { id: 2, status: 'accepted', date: '2023-06-27', time: '2:00 PM', customer: 'Jane Smith' },
-        { id: 3, status: 'declined', date: '2023-06-28', time: '4:30 PM', customer: 'Alex Johnson' },
-        { id: 4, status: 'finished', date: '2023-06-29', time: '9:00 AM', customer: 'Emily Brown' },
-        { id: 5, status: 'finished', date: '2023-06-29', time: '9:00 AM', customer: 'Emily Brown' }
-        // ... add more appointments
-    ];
+    const [appointments, setAppointments] = useState([]);
+    const navigate = useNavigate();
+    const headers = { 'Authorization': localStorage.getItem("token") };
+
+    useEffect(() => {
+        fetchAppointments();
+    }, []);
+
+    const fetchAppointments = () => {
+        fetch('https://localhost:44392/api/Booking/getBookingsByUserId/userId?userId=2', { headers })
+            .then(response => response.json())
+            .then(data => setAppointments(data))
+            .catch(error => console.log(error));
+    }
 
     // Filter appointments based on status
-    const pendingAppointments = appointments.filter(appointment => appointment.status === 'pending');
-    const acceptedAppointments = appointments.filter(appointment => appointment.status === 'accepted');
-    const declinedAppointments = appointments.filter(appointment => appointment.status === 'declined');
-    const finishedAppointments = appointments.filter(appointment => appointment.status === 'finished');
+    const pendingAppointments = appointments.filter(appointment => appointment.appointmentStatus === 'Pending');
+    const acceptedAppointments = appointments.filter(appointment => appointment.appointmentStatus === 'Accepted');
+    const declinedAppointments = appointments.filter(appointment => appointment.appointmentStatus === 'Declined');
+    const finishedAppointments = appointments.filter(appointment => appointment.appointmentStatus === 'Finished');
 
     // Helper function to render appointment items
     const renderAppointmentItems = appointmentList => {
         const handleCancelAppointment = appointmentId => {
-            // Handle canceling the appointment with the given ID
+            let updateObject = {
+                appointmentId: appointmentId,
+                status: "Finished"
+            }
             console.log(`Cancel appointment with ID: ${appointmentId}`);
+
+            fetch("https://localhost:44392/api/Booking/changeAppointmentStatus", {
+                method: 'PATCH', // Use PATCH instead of POST
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem("token"),
+                },
+                body: JSON.stringify(updateObject)
+            })
+                .then((response) => response.json())
+                .then((json) => console.log(json))
+                .catch((error) => console.log(error));
+
+                setAppointments(appointments.map(appointment =>{
+                    if(appointment.id === appointmentId){
+                        return {...appointment, appointmentStatus: 'Finished'};
+                    }
+                    return appointment;
+                }));
         };
 
         const handleLeaveFeedback = appointmentId => {
             // Handle redirecting to the feedback page for the appointment with the given ID
             console.log(`Redirect to leave feedback for appointment with ID: ${appointmentId}`);
+            navigate('/customer/leavefeedback');
         };
 
         return appointmentList.map(appointment => (
-            <li key={appointment.id}>
-                <span>{appointment.customer}</span>
-                <span>Date: {appointment.date}</span>
-                <span>Time: {appointment.time}</span>
-                {appointment.status === 'pending' && (
+            <div key={appointment.id} className="appointment-card">
+                <div>{appointment.carLicencePlate}</div>
+                <p>Servis: {appointment.shopName}</p>
+                <p>Usluga: {appointment.serviceeName}</p>
+                <p>Datum: {appointment.appointmentDate}</p>
+                {appointment.appointmentStatus === 'Pending' && (
                     <button onClick={() => handleCancelAppointment(appointment.id)}>Cancel</button>
                 )}
-                {appointment.status === 'finished' && (
-                    <button onClick={() => handleLeaveFeedback(appointment.id)}>Leave Feedback</button>
+                {appointment.appointmentStatus === 'Finished' && (
+                    <button onClick={() => handleLeaveFeedback(appointment.id)} style={{width: '60%'}}>Leave Feedback</button>
                 )}
-            </li>
+            </div>
         ));
     };
 
     return (
         <div>
-            <Navbar/>
+            <Navbar />
             <div className="appointments-page">
                 <div className="section">
-                    <h2>Pending Appointments</h2>
+                    <h2>Termini na čekanju</h2>
                     <ul>{renderAppointmentItems(pendingAppointments)}</ul>
                 </div>
                 <div className="section">
-                    <h2>Accepted Appointments</h2>
+                    <h2>Prihvaćeni termini</h2>
                     <ul>{renderAppointmentItems(acceptedAppointments)}</ul>
                 </div>
                 <div className="section">
-                    <h2>Declined Appointments</h2>
+                    <h2>Odbijeni termini</h2>
                     <ul>{renderAppointmentItems(declinedAppointments)}</ul>
                 </div>
                 <div className="section">
-                    <h2>Finished Appointments</h2>
+                    <h2>Završeni termini</h2>
                     <ul>{renderAppointmentItems(finishedAppointments)}</ul>
                 </div>
             </div>

@@ -26,11 +26,11 @@
   }
   
   .split-body div:hover::after {
-    background-color: rgba(0, 0, 255, 0.3);
+    background-color: #3f51b5;
   }
   
   .split-body div.active::after {
-    background-color: rgba(0, 0, 255, 0.5);
+    background-color: #3f51b5;
   }
   
   .split-body div:hover {

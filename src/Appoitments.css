@@ -1,54 +1,65 @@
 .appointments-page {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .section {
-    flex-basis: 100%;
-  }
-  
-  .section h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .section ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .section li {
-    display: flex;
-    align-items: center;
-    background-color: #f8f8f8;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .section li span {
-    flex-grow: 1;
-    margin-bottom: 5px;
-  }
-  
-  .section li button {
-    margin-left: 10px;
-  }
-  
-  /* Additional styling for different appointment statuses */
-  .section.pending {
-    background-color: #ffd700;
-  }
-  
-  .section.accepted {
-    background-color: #90ee90;
-  }
-  
-  .section.declined {
-    background-color: #ff4500;
-  }
-  
-  .section.finished {
-    background-color: #a9a9a9;
-  }
-  
+  display: block;
+  gap: 20px;
+}
+
+.section {
+  flex-basis: 100%;
+}
+
+.section h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.appointment-card {
+  display: inline-block;
+  margin: 5px;
+  width: 200px;
+  /* adjust this as needed */
+  height: auto;
+  /* adjust this as needed */
+  text-align: center;
+  background-color: #f1f1f1;
+  /* gray background color */
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 2px solid #3f51b5;
+  /* blue border */
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.appointment-card:hover {
+  transform: scale(1.05);
+  /* pop-up effect on hover */
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.3);
+  /* shadow on hover */
+}
+
+.appointment-card div {
+  margin-bottom: 5px;
+}
+
+.appointment-card button {
+  margin-top: 10px;
+  align-self: center;
+  padding: 10px 20px;
+  margin-right: 10px;
+  font-size: 16px;
+  background-color: #3f51b5;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 40%;
+  font-size: 40%;
+}
+
+.appointment-card p {
+  font-size: 17px;
+  color: #007bff;
+  /* blue text color */
+}

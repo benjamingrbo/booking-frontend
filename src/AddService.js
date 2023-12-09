@@ -1,58 +1,96 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './Addservice.css';
 
-const categories = ['Maintenance', 'Repairs', 'Inspections'];
 
 const AddService = () => {
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [price, setPrice] = useState('');
-    const [moreInformation, setMoreInformation] = useState('');
 
-    const handleCategoryChange = (event) => {
-        setSelectedCategory(event.target.value);
-    };
+    const[services, setServices] = useState([]);
+    const[newService, setNewService] = useState({
+        carshopId: 3,
+        serviceId: 0,
+        price: "",
+        moreInformation: ""
+    })
+    const headers = { 'Authorization': localStorage.getItem("token") };
 
-    const handlePriceChange = (event) => {
-        setPrice(event.target.value);
-    };
+    useEffect(()=>{
+        fetch('https://localhost:44392/api/CarService/getAllCarServices', { headers })
+            .then(response => response.json())
+            .then(data => setServices(data))
+            .catch(error => console.log(error));
+    }, []);
 
-    const handleMoreInformationChange = (event) => {
-        setMoreInformation(event.target.value);
-    };
+    const handleChange = (event) =>{
+        let {name, value} = event.target;
+        if(name === "serviceId"){
+            value = parseInt(value);
+        }
+        setNewService((prevNewService) => ({
+            ...prevNewService,
+            [name]: value,
+        }))
+
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
         // Add your submit logic here, e.g., API call
-        console.log('Category:', selectedCategory);
-        console.log('Price:', price);
-        console.log('More Information:', moreInformation);
+        console.log(newService);
+        fetch("https://localhost:44392/api/CarShopService/saveCarShopService", {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': localStorage.getItem("token"),
+              
+            },
+            body: JSON.stringify(newService)
+          })
+            .then((response) => response.json())
+            .then((json) => console.log(json))
+            .catch((error) => console.log(error));
     };
 
     return (
-        <div className="container">
+        <>
+        <div className="addServiceContainer">
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="category">Category:</label>
-                    <select id="category" value={selectedCategory} onChange={handleCategoryChange}>
-                        <option value="">Select a category</option>
-                        {categories.map((category) => (
-                            <option key={category} value={category}>
-                                {category}
+                <label htmlFor="serviceId">Usluga</label>
+                    <hr></hr>
+                    <select id="category" value={newService.serviceId} onChange={handleChange} name="serviceId">
+                        <option value="">Izaberite uslugu</option>
+                        {services.map((service) => (
+                            <option key={service.id} value={service.id}>
+                                {service.serviceeName}
                             </option>
                         ))}
                     </select>
                 </div>
+                <br></br>
+                <br></br>
                 <div>
-                    <label htmlFor="price">Price:</label>
-                    <input type="text" id="price" value={price} onChange={handlePriceChange} />
+                    <label htmlFor="price">Cijena</label>
+                    <hr></hr>
+                    <input type="text" id="price" value={newService.price} onChange={handleChange} name="price" placeholder="20 KM"/> 
                 </div>
+                <br></br>
+                <br></br>
                 <div>
-                    <label htmlFor="moreInformation">More Information:</label>
-                    <textarea id="moreInformation" value={moreInformation} onChange={handleMoreInformationChange} />
+                    <label htmlFor="moreInformation">Više informacija</label>
+                    <hr></hr>
+                    <textarea id="moreInformation" value={newService.moreInformation} onChange={handleChange} name="moreInformation"/>
                 </div>
-                <button type="submit">Submit</button>
+                <br></br>
+                <br></br>
+                <button 
+                type="submit" 
+                disabled={newService.serviceId === 0 || newService.moreInformation === "" || newService.price === ""}>
+                    Submit
+                </button>
             </form>
         </div>
+        </>
     );
 };
 

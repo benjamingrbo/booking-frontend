@@ -1,6 +1,5 @@
-input,
-select {
-    width: 20%;
+#optionSubmit select {
+    width: 45%;
     padding: 12px;
     border-radius: 10px;
     background-color: #f1f1f1;
@@ -8,24 +7,34 @@ select {
     margin-bottom: 10px;
     border: 1px solid black;
     margin-right: 1%;
+    display: inline-block;
 }
 
 select {
     appearance: none;
 }
 
-button {
+#optionSubmit button {
     padding: 12px 20px;
     border-radius: 10px;
     background-color: #f1f1f1;
     font-size: 16px;
     cursor: pointer;
-    background-color: rgba(0, 0, 255, 0.5);
+    background-color: #3f51b5;
     color: white;
     border: none;
+    width: 100%;
+    margin-left: 0;
 }
 
-form {
-    width: 100%
+#optionSubmit {
+    width: 100%;
+    max-width: 60%;
+    display: block;
 }
 
+#optionSubmit button:disabled {
+    
+    cursor: not-allowed;
+
+}

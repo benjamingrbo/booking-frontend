@@ -4,7 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { BrowserRouter as Router, Route, Routes, Navigate, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, Link, useNavigate } from 'react-router-dom';
 import SearchElement from "./SearchElement";
 
 
@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
 const Navbar = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleOpen = () => {
     setOpen(true);
@@ -29,13 +30,17 @@ const Navbar = () => {
     setOpen(false);
   };
 
+  const handleOnClick = () => {
+    navigate('/');
+  }
+
   return (
     <div>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>GARAGE BOOK</Typography>
-          <Link to="/customer/appoitments"><Button color="inherit" onClick={handleOpen}>Appoitments</Button></Link>
-          <Link to="/customer/myprofile"><Button color="inherit" onClick={handleOpen}>My Profile</Button></Link>
+          <Typography variant="h6" className={classes.title} onClick={()=> handleOnClick()}>GARAGE BOOK</Typography>
+          <Link to="/customer/appoitments"><Button color="inherit" onClick={handleOpen} style={{color:'white'}}>Termini</Button></Link>
+          <Link to="/customer/myprofile"><Button color="inherit" onClick={handleOpen} style={{color:'white'}}>Profil</Button></Link>
         </Toolbar>
       </AppBar>
     </div>

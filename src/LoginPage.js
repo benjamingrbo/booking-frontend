@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import './LoginPage.css';
-import { Navigate, useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import jwt_decode from "jwt-decode";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [userRole, setUserRole] = useState('');
-
+  const navigate = useNavigate();
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -50,42 +47,46 @@ const LoginPage = () => {
         }
       })
       .then(responseData => {
-        localStorage.setItem("token", responseData.token);
+        localStorage.setItem("token", "Bearer " + responseData.token);
         handleSuccessfulLogin();
       })
       .catch(error => {
         console.error('Error:', error);
       });
-
-  }
+  };
 
   const handleSuccessfulLogin = () => {
     const token = localStorage.getItem("token");
     const decodedToken = parseJwtToken(token);
     const userRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-    setUserRole(userRole);
-  }
+    const userId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
+    localStorage.setItem("userRole", userRole);
+    localStorage.setItem("isAuth", "true");
+    localStorage.setItem("userId", userId)
+    navigate('/');
+    window.location.reload();
+  };
 
   const parseJwtToken = (token) => {
     const decoded = jwt_decode(token);
     console.log(decoded);
     return decoded;
-  }
+  };
 
   return (
     <div id="login-form-wrap">
       <h2>Login</h2>
-      <form id="login-form">
+      <form id="login-form" onSubmit={handleSubmit}>
         <p>
-          <input type="text" id="username" name="username" placeholder="Username" value={username} onChange={handleUsernameChange} required></input>
+          <input type="text" id="username" name="username" placeholder="Username" value={username} onChange={handleUsernameChange} required />
         </p>
         <p>
-          <input type="password" id="password" name="password" placeholder="Password" value={password} onChange={handlePasswordChange} required></input>
+          <input type="password" id="password" name="password" placeholder="Password" value={password} onChange={handlePasswordChange} required />
         </p>
         <p>
-          <input type="submit" id="login" value="Login" onClick={handleSubmit}></input>
+          <input type="submit" id="login" value="Login" />
         </p>
-        <br></br>
+        <br />
       </form>
     </div>
   );

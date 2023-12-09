@@ -29,14 +29,14 @@ const Admin = () => {
         onMouseEnter={handleMouseEnterDiv1}
         onMouseLeave={handleMouseLeaveDiv1}
       >
-        <Link to="/admin/myprofile">Manage Car Shop</Link>
+        <Link to="/admin/myprofile">Upravljaj profilom servisa</Link>
       </div>
       <div
         className={`split-body-div ${isHoveringDiv2 ? 'active' : ''}`}
         onMouseEnter={handleMouseEnterDiv2}
         onMouseLeave={handleMouseLeaveDiv2}
       >
-        <Link to="/admin/appoitments">Manage Appointments</Link>
+        <Link to="/admin/appoitments">Upravljaj terminima</Link>
       </div>
     </div>
   );

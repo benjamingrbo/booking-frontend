@@ -1,81 +1,61 @@
 import React, { useEffect, useState } from "react";
 import "./DataFetcherComponent.css"
 import Navbar from "./Navbar";
+import { BrowserRouter as Router, Route, Routes, Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
 
 const DataFetcherComponent = () => {
     const [data, setData] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [selectedStore, setSelectedStore] = useState(null);
+    const { state } = useLocation();
+    const { cityId, serviceId } = state;
+    const navigate = useNavigate();
+    const headers = { 'Authorization': localStorage.getItem("token") };
 
     const handleOpenModal = (store) => {
         setSelectedStore(store);
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Simulating the API call with a delay
-                setTimeout(() => {
-                    const mockData = [
-                        {
-                            id: 1,
-                            image: "https://res.cloudinary.com/intercars/image/upload/c_scale,w_800,f_auto,q_auto/v1656689763/workshops_prod2/lpdo7rod/lpdo7rod_image_0.jpg",
-                            name: "Store 1",
-                            address: "123 Street, City",
-                            contact: "123-456-7890",
-                            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                        },
-                        {
-                            id: 2,
-                            image: "store2.jpg",
-                            name: "Store 2",
-                            address: "456 Street, City",
-                            contact: "987-654-3210",
-                            description: "Ut fringilla magna eu ante placerat, a rutrum lectus accumsan.",
-                        },
-                        // Add more store objects here...
-                    ];
-                    setData(mockData);
-                    setIsLoading(false);
-                }, 2000);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                setIsLoading(false);
-            }
-        };
-
-        fetchData();
+        fetch(`https://localhost:44392/api/CarShop/getCarShopsByCityIdOrServiceId/${cityId}/${serviceId}`, { headers })
+            .then(response => response.json())
+            .then(data => setData(data))
+            .catch(error => console.log(error));
     }, []);
+
+    const handleStorenameClick = (id) => {
+        navigate('/customer/carshop', {state : {carshopId: id}});
+    }
 
     return (
         <div>
             <Navbar />
             <div className="data-list">
-                {isLoading ? (
-                    <p>Loading...</p>
-                ) : (
+                {
                     data.map((store) => (
                         <div key={store.id} className="data-item">
                             <div className="store-image">
-                                <img src={store.image} alt="Store" />
+                                <img src={store.linkToImage} alt="Store" />
                             </div>
                             <div className="store-info">
-                                <h3 className="store-name">{store.name}</h3>
-                                <p className="store-address">{store.address}</p>
-                                <p className="store-contact">{store.contact}</p>
-                                <p className="store-description">{store.description}</p>
+                                <h3 className="store-name" onClick={() => {handleStorenameClick(store.id)}}>{store.shopName}</h3>
+                                <p className="store-address">{store.shopAddress}</p>
+                                <p className="store-contact">{store.contactNumbert}</p>
+                                <p style={{fontSize: 12}} id="store-description">{store.carShopDescription}</p>
+                                <hr></hr>
+                                <p style={{fontSize: 15}}>{store.moreInformation}</p>
+                                <p style={{fontSize: 20}}>{store.price}</p>
                             </div>
-                            <button className="store-details-button" onClick={() => handleOpenModal(store)}>Open Details</button>
+                            <button className="store-details-button" onClick={() => handleOpenModal(store)}>Rezerviši</button>
                         </div>
                     ))
-                )}
+                }
             </div>
-            {selectedStore && <Modal store={selectedStore} onClose={() => setSelectedStore(null)} />}
+            {selectedStore && <Modal store={selectedStore} onClose={() => setSelectedStore(null)}  serviceId={serviceId}/>}
         </div>
     );
 };
 
-const Modal = ({ store, onClose }) => {
+const Modal = ({ store, onClose, serviceId }) => {
     const [step, setStep] = useState(1);
     const [vehicleData, setVehicleData] = useState({
         make: '',
@@ -86,8 +66,8 @@ const Modal = ({ store, onClose }) => {
         vin: '',
     });
     const [termSelection, setTermSelection] = useState({
-        asap: true,
-        selectedDateTime: null,
+        asap: false,
+        selectedDateTime: '0000-00-00T00:00',
     });
 
     const handleVehicleDataChange = (e) => {
@@ -104,6 +84,7 @@ const Modal = ({ store, onClose }) => {
             setTermSelection((prevSelection) => ({
                 ...prevSelection,
                 asap: value === 'true',
+                selectedDateTime: '0000-00-00T00:00',
             }));
         } else {
             setTermSelection((prevSelection) => ({
@@ -112,6 +93,36 @@ const Modal = ({ store, onClose }) => {
             }));
         }
     };
+
+    const submitBooking = () => {
+        let booking = {
+            customerId: 2,
+            carLicencePlate: vehicleData.licensePlate,
+            carShopServiceId: parseInt(serviceId),
+            appointmentDate: termSelection.selectedDateTime,
+            appointmentStatus: "Pending",
+            carMake: vehicleData.make,
+            carModel: vehicleData.model,
+            carYear: parseInt(vehicleData.year),
+            carColor: vehicleData.color,
+            carVin: vehicleData.vin
+        }
+
+        console.log(booking);
+
+        fetch("https://localhost:44392/api/Booking/saveBooking", {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': localStorage.getItem("token"),
+            },
+            body: JSON.stringify(booking)
+          })
+            .then((response) => response.json())
+            .then((json) => console.log(json))
+            .catch((error) => console.log(error));
+    }
 
     const handleNextStep = () => {
         if (step === 1) {
@@ -130,6 +141,7 @@ const Modal = ({ store, onClose }) => {
             }
         } else if (step === 3) {
             // Handle data submission to backend
+            submitBooking();
             // Reset form and close modal
             setVehicleData({
                 make: '',
@@ -150,21 +162,21 @@ const Modal = ({ store, onClose }) => {
 
     const handleCancel = () => {
         setVehicleData({
-          make: "",
-          model: "",
-          year: "",
-          color: "",
-          licensePlate: "",
-          vin: "",
+            make: "",
+            model: "",
+            year: "",
+            color: "",
+            licensePlate: "",
+            vin: "",
         });
         setTermSelection({
-          asap: true,
-          selectedDateTime: null,
+            asap: true,
+            selectedDateTime: null,
         });
         setStep(1);
         onClose();
-      };
-    
+    };
+
 
     return (
         <div className="modal">

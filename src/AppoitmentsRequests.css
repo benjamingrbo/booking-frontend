@@ -1,40 +1,47 @@
-/* appointment-requests.css */
+.appointments-page {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
 
-#pending-requests-heading,
-#accepted-requests-heading,
-#declined-requests-heading,
-#finished-requests-heading {
-  font-size: 20px;
+.section {
+  flex-basis: 100%;
+}
+
+.section-heading {
+  font-size: 24px;
   margin-bottom: 10px;
 }
 
-#pending-requests-list,
-#accepted-requests-list,
-#declined-requests-list,
-#finished-requests-list {
+.appointment-list {
   list-style-type: none;
   padding-left: 0;
   margin-bottom: 20px;
 }
 
-#pending-requests-list li,
-#accepted-requests-list li,
-#declined-requests-list li,
-#finished-requests-list li {
-  display: flex;
-  align-items: center;
+.appointment-list li {
+  display: inline-block;
   margin-bottom: 5px;
 }
 
-button {
-  margin-left: 10px;
-  padding: 5px 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
+.appointment-card {
+  display: inline-block;
+  margin: 5px;
+  width: 200px;  /* adjust this as needed */
+  height: auto;  /* adjust this as needed */
+  text-align: center; /* aligns inline & inline-block children in the center */
+  background-color: #007bff; /* adjust this to the blue color you want */
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.15);
+  border-radius: 10px; /* adjust this as needed to get the roundness of corners you want */
 }
 
-button:hover {
-  background-color: #0056b3;
+.appointment-card div {
+  margin-bottom: 5px;
+}
+
+.appointment-card button {
+  margin-top: 10px;
+  align-self: center;
 }
